@@ -34,6 +34,8 @@ namespace BollGame
 
         int Level = 1;
 
+        bool cheat = false;
+
         public Form1()
         {
             InitializeComponent();
@@ -98,6 +100,7 @@ namespace BollGame
                         monsters[i].ChangeColor(Color.DarkRed);
 
                         //死んだフラグを立てる
+                        if(!cheat)
                         IsDead = true;
                     }
                 }
@@ -197,7 +200,7 @@ namespace BollGame
                 Y = -20,
                 LeftRightSpeed = RandomNumberGenerator.GetInt32(LvMinLeftRightSpeed, LvMaxLeftRightSpeed),
                 Speed = RandomNumberGenerator.GetInt32(LvMinSpeed, LvMaxSpeed),
-                Size = RandomNumberGenerator.GetInt32(10, 20)
+                Size = RandomNumberGenerator.GetInt32(10, 20),
             };
 
             //モンスター描画リストに追加
@@ -205,30 +208,25 @@ namespace BollGame
         }
 
         /// <summary>
-        /// キーボードでプレイヤーを動かす
+        /// キーボード処理
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
             ////プレイヤーの移動
-            //switch (e.KeyChar)
-            //{
-            //    case 'a':
-            //        player.X -= 10;
-            //        break;
-            //    case 'd':
-            //        player.X += 10;
-            //        break;
-            //    case 'w':
-            //        player.Y -= 15;
-            //        break;
-            //    case 's':
-            //        player.Y += 15;
-            //        break;
-            //    default:
-            //        break;
-            //}
+            switch (e.KeyChar)
+            {
+                case '1':
+                    cheat = true;
+                    break;
+                case '2':
+                    Score += 100;
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         /// <summary>
