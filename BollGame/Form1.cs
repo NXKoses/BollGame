@@ -1,6 +1,5 @@
-using System.Diagnostics;
+using System.Drawing.Design;
 using System.Security.Cryptography;
-using static System.Formats.Asn1.AsnWriter;
 using Timer = System.Windows.Forms.Timer;
 
 namespace BollGame
@@ -20,14 +19,20 @@ namespace BollGame
         //死んだかどうか
         bool IsDead = false;
 
-        //敵が出てくるスピード(ミリ秒)
-        const int MonsterSpawnTime = 80;
-
         //マウス座標
         Point screenpoint, clientpoint;
 
         //スコア
         int Score = 0;
+
+        //レベルによって変化する値
+        int LvMaxSpeed = 9;
+        int LvMinSpeed = 3;
+
+        int LvMinLeftRightSpeed = 0;
+        int LvMaxLeftRightSpeed = 1;
+
+        int Level = 1;
 
         public Form1()
         {
@@ -43,7 +48,7 @@ namespace BollGame
             Updatetimer.Tick += new EventHandler(Update);
             Updatetimer.Start();
 
-            Monstertimer.Interval = MonsterSpawnTime;
+            Monstertimer.Interval = 100;
             Monstertimer.Tick += new EventHandler(MonsterUpdate);
             Monstertimer.Start();
         }
@@ -68,8 +73,6 @@ namespace BollGame
             //スコアの追加
             Score += 1;
 
-
-            Debug.WriteLine(Score);
             //再描画   Form1_Paintが呼び出される
             Invalidate();
         }
@@ -92,7 +95,7 @@ namespace BollGame
                             (monsters[i].Position.Top < player.Position.Bottom))
                     {
                         //当たったら色を変える
-                        monsters[i].SetColor(Color.DarkRed);
+                        monsters[i].ChangeColor(Color.DarkRed);
 
                         //死んだフラグを立てる
                         IsDead = true;
@@ -113,7 +116,42 @@ namespace BollGame
             player.Draw(e);
 
             //スコアの表示
-            this.Text = Name + " Score: " + Score; 
+            this.Text = Name + " Score: " + Score;
+            LevelDraw(Level, e);
+        }
+
+        /// <summary>
+        /// 指定したタイマーのインターバルを変更します。
+        /// </summary>
+        /// <param name="timer"></param>
+        /// <param name="interval"></param>
+        private void ChangeTimerInterval(Timer timer, int interval)
+        {
+            timer.Stop();
+            timer.Interval = interval;
+            timer.Start();
+        }
+
+        /// <summary>
+        /// レベルの表示
+        /// </summary>
+        /// <param name="lv"></param>
+        /// <param name="e"></param>
+        private void LevelDraw(int lv, PaintEventArgs e)
+        {
+            using Font Font = new Font("メイリオ", 20, FontStyle.Regular);
+            SolidBrush brush = new SolidBrush(Color.White);
+
+            if (lv == 2)
+                brush.Color = Color.Orange;
+
+            if (lv == 3)
+                brush.Color = Color.OrangeRed;
+
+            if (lv == 4)
+                brush.Color = Color.PaleVioletRed;
+
+            e.Graphics.DrawString("【Level: " + lv + "】", Font, brush, 150, 10);
         }
 
         /// <summary>
@@ -123,12 +161,42 @@ namespace BollGame
         /// <param name="e"></param>
         private void MonsterUpdate(object sender, EventArgs e)
         {
+            if (600 < Score)
+            {
+                Level = 2;
+                LvMinSpeed = 4;
+                ChangeTimerInterval(Monstertimer, 70);
+                LvMinLeftRightSpeed = -1;
+                LvMaxLeftRightSpeed = 1;
+            }
+
+            if (1200 < Score)
+            {
+                Level = 3;
+                LvMinSpeed = 4;
+                LvMaxSpeed = 11;
+                ChangeTimerInterval(Monstertimer, 55);
+                LvMinLeftRightSpeed = -2;
+                LvMaxLeftRightSpeed = 2;
+            }
+
+            if (1800 < Score)
+            {
+                Level = 4;
+                LvMinSpeed = 4;
+                LvMaxSpeed = 12;
+                ChangeTimerInterval(Monstertimer, 50);
+                LvMinLeftRightSpeed = -3;
+                LvMaxLeftRightSpeed = 3;
+            }
+
             //ランダムな速度、位置でインスタンス化
             Monster monster = new Monster
             {
                 X = RandomNumberGenerator.GetInt32(0, this.Size.Width),
                 Y = -20,
-                Speed = RandomNumberGenerator.GetInt32(1, 10),
+                LeftRightSpeed = RandomNumberGenerator.GetInt32(LvMinLeftRightSpeed, LvMaxLeftRightSpeed),
+                Speed = RandomNumberGenerator.GetInt32(LvMinSpeed, LvMaxSpeed),
                 Size = RandomNumberGenerator.GetInt32(10, 20)
             };
 

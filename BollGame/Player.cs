@@ -5,7 +5,7 @@
         public Player()
         {
             Position = new Rectangle(200, 350, Size, Size);
-            Brush = new SolidBrush(Color.Black);
+            Brush = new SolidBrush(Color.DarkCyan);
             Size = 20;
         }
 
@@ -16,11 +16,6 @@
         public void Draw(PaintEventArgs e)
         {
             e.Graphics.FillRectangle(Brush, X, Y, Size, Size);
-        }
-
-        public void SetColor(Color newcolor)
-        {
-            Brush.Color = newcolor;
         }
     }
 }

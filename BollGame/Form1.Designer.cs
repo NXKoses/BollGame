@@ -34,10 +34,12 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(488, 450);
+            BackColor = SystemColors.Desktop;
+            ClientSize = new Size(484, 761);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             Name = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Game";
             Paint += Form1_Paint;
             KeyPress += Form1_KeyPress;

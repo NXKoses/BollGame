@@ -1,14 +1,19 @@
-﻿namespace BollGame
+﻿using System.Threading;
+
+namespace BollGame
 {
     internal class Monster : CharacterBase
     {
         //落下速度
         public int Speed { get; set; }
 
+        //左右移動
+        public int LeftRightSpeed { get; set; }
+
         public Monster()
         {
             Position = new Rectangle(0, 0, Size, Size);
-            Brush = new SolidBrush(Color.Red);
+            Brush = new SolidBrush(Color.Gray);
             Size = 20;
         }
 
@@ -20,13 +25,20 @@
         {
             e.Graphics.FillRectangle(Brush, X, Y, Size, Size);
 
+            //スピードになどよって色を変える
+            if (Size > 15)
+            {
+                Brush.Color = Color.DarkGray;
+            }
+
+            if (Speed > 5)
+            {
+                Brush.Color = Color.IndianRed;
+            }
+
             //落下
             Y += Speed;
-        }
-
-        public void SetColor(Color newcolor)
-        {
-            Brush.Color = newcolor;
+            X += LeftRightSpeed;
         }
     }
 }

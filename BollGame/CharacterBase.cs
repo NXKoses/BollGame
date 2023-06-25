@@ -15,7 +15,7 @@
         }
 
         /// <summary>
-        ///  四角
+        ///  四角オブジェクト
         /// </summary>
         public Rectangle Position { get; set; }
 
@@ -28,5 +28,14 @@
         /// 大きさ
         /// </summary>
         public int Size { get; set; }
+
+        /// <summary>
+        /// 色を変更します。
+        /// </summary>
+        /// <param name="newcolor"></param>
+        public void ChangeColor(Color newcolor)
+        {
+            Brush.Color = newcolor;
+        }
     }
 }
