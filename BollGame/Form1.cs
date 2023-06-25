@@ -23,7 +23,7 @@ namespace BollGame
         bool IsDead = false;
 
         //敵が出てくるスピード(ミリ秒)
-        const int MonsterSpawnTime = 100;
+        const int MonsterSpawnTime = 80;
 
         //マウス座標
         Point screenpoint, clientpoint;
@@ -102,8 +102,6 @@ namespace BollGame
                 monsters[i].Draw(e);
             }
 
-            Debug.WriteLine(monsters.Count);
-
             //プレイヤーの描画
             player.Draw(e);
         }
@@ -119,8 +117,8 @@ namespace BollGame
             Monster monster = new Monster
             {
                 X = RandomNumberGenerator.GetInt32(0, this.Size.Width),
-                Y = -10,
-                Speed = RandomNumberGenerator.GetInt32(1, 4),
+                Y = -20,
+                Speed = RandomNumberGenerator.GetInt32(1, 10),
                 Size = RandomNumberGenerator.GetInt32(10, 20)
             };
 
@@ -169,7 +167,6 @@ namespace BollGame
             player.X = clientpoint.X;
             player.Y = clientpoint.Y;
 
-            //Debug.WriteLine(player.Position.Right);
         }
     }
 }
