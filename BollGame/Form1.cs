@@ -1,9 +1,7 @@
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
-using System.Numerics;
-using Timer = System.Windows.Forms.Timer;
-using System.Security.Cryptography;
 using System.Diagnostics;
-using System.Threading;
+using System.Security.Cryptography;
+using static System.Formats.Asn1.AsnWriter;
+using Timer = System.Windows.Forms.Timer;
 
 namespace BollGame
 {
@@ -27,6 +25,10 @@ namespace BollGame
 
         //マウス座標
         Point screenpoint, clientpoint;
+
+        //スコア
+        int Score = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -59,10 +61,15 @@ namespace BollGame
                 Updatetimer.Stop();
                 Monstertimer.Stop();
                 Cursor.Show();
-                MessageBox.Show("ゲームオーバー");
+                MessageBox.Show("ゲームオーバー！　スコア：" + Score);
                 return;
             }
 
+            //スコアの追加
+            Score += 1;
+
+
+            Debug.WriteLine(Score);
             //再描画   Form1_Paintが呼び出される
             Invalidate();
         }
@@ -102,8 +109,11 @@ namespace BollGame
                 monsters[i].Draw(e);
             }
 
-            //プレイヤーの描画
+            /*プレイヤーの描画*/
             player.Draw(e);
+
+            //スコアの表示
+            this.Text = Name + " Score: " + Score; 
         }
 
         /// <summary>

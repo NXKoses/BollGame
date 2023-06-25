@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace BollGame
+﻿namespace BollGame
 {
     internal class Player : CharacterBase
     {
