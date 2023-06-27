@@ -176,7 +176,6 @@ namespace BollGame
             if (1200 < Score)
             {
                 Level = 3;
-                LvMinSpeed = 4;
                 LvMaxSpeed = 11;
                 ChangeTimerInterval(Monstertimer, 55);
                 LvMinLeftRightSpeed = -2;
@@ -186,7 +185,6 @@ namespace BollGame
             if (1800 < Score)
             {
                 Level = 4;
-                LvMinSpeed = 4;
                 LvMaxSpeed = 12;
                 ChangeTimerInterval(Monstertimer, 50);
                 LvMinLeftRightSpeed = -3;
