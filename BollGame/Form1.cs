@@ -100,8 +100,8 @@ namespace BollGame
                         monsters[i].ChangeColor(Color.DarkRed);
 
                         //死んだフラグを立てる
-                        if(!cheat)
-                        IsDead = true;
+                        if (!cheat)
+                            IsDead = true;
                     }
                 }
 
@@ -212,7 +212,6 @@ namespace BollGame
         /// <param name="e"></param>
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            ////プレイヤーの移動
             switch (e.KeyChar)
             {
                 case '1':
