@@ -25,15 +25,23 @@ namespace BollGame
         //スコア
         int Score = 0;
 
-        //レベルによって変化する値
-        int LvMaxSpeed = 9;
-        int LvMinSpeed = 3;
+        //レベル１の移動速度 初期値
+        const int LvMaxSpeed = 9;
+        const int LvMinSpeed = 3;
 
-        int LvMinLeftRightSpeed = 0;
-        int LvMaxLeftRightSpeed = 1;
+        const int LvMaxLeftRightSpeed = 1;
+        const int LvMinLeftRightSpeed = 0;
+
+        //-- レベルに応じて変化させる変数 --
+        int lvmaxspeed = LvMaxSpeed;
+        int lvminspeed = LvMinSpeed;
+
+        int lvmaxleftrightspeed = LvMaxLeftRightSpeed;
+        int lvminleftrightspeed = LvMinLeftRightSpeed;
 
         int Level = 1;
-
+        //---------------------------
+        
         bool cheat = false;
 
         public Form1()
@@ -64,12 +72,27 @@ namespace BollGame
         {
             if (IsDead)
             {
-                //ゲームオーバー
+                /*ゲームオーバー*/
+                
+                //タイマーを止める
                 Updatetimer.Stop();
                 Monstertimer.Stop();
+
+                //カーソルを表示する
                 Cursor.Show();
-                MessageBox.Show("ゲームオーバー！　スコア：" + Score);
-                return;
+
+                //再挑戦するか聞く
+                var result = MessageBox.Show("ゲームオーバー！　スコア：" + Score + Environment.NewLine +
+                    "再挑戦する？ ", "( ;∀;)", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    //変数初期化する
+                    Restart();
+                }
+                else
+                {
+                    return;
+                }
             }
 
             //スコアの追加
@@ -118,9 +141,11 @@ namespace BollGame
             /*プレイヤーの描画*/
             player.Draw(e);
 
+            /*レベルの描画*/
+            LevelDraw(Level, e);
+            
             //スコアの表示
             this.Text = Name + " Score: " + Score;
-            LevelDraw(Level, e);
         }
 
         /// <summary>
@@ -167,28 +192,28 @@ namespace BollGame
             if (600 < Score)
             {
                 Level = 2;
-                LvMinSpeed = 4;
+                lvminspeed = 4;
                 ChangeTimerInterval(Monstertimer, 70);
-                LvMinLeftRightSpeed = -1;
-                LvMaxLeftRightSpeed = 1;
+                lvmaxleftrightspeed= 1;
+                lvminleftrightspeed = -1;
             }
 
             if (1200 < Score)
             {
                 Level = 3;
-                LvMaxSpeed = 11;
+                lvmaxspeed = 11;
                 ChangeTimerInterval(Monstertimer, 55);
-                LvMinLeftRightSpeed = -2;
-                LvMaxLeftRightSpeed = 2;
+                lvmaxleftrightspeed = 2;
+                lvminleftrightspeed = -2;
             }
 
             if (1800 < Score)
             {
                 Level = 4;
-                LvMaxSpeed = 12;
+                lvmaxspeed = 12;
                 ChangeTimerInterval(Monstertimer, 50);
-                LvMinLeftRightSpeed = -3;
-                LvMaxLeftRightSpeed = 3;
+                lvmaxleftrightspeed = 3;
+                lvminleftrightspeed = -3;
             }
 
             //ランダムな速度、位置でインスタンス化
@@ -196,8 +221,8 @@ namespace BollGame
             {
                 X = RandomNumberGenerator.GetInt32(0, this.Size.Width),
                 Y = -20,
-                LeftRightSpeed = RandomNumberGenerator.GetInt32(LvMinLeftRightSpeed, LvMaxLeftRightSpeed),
-                Speed = RandomNumberGenerator.GetInt32(LvMinSpeed, LvMaxSpeed),
+                LeftRightSpeed = RandomNumberGenerator.GetInt32(lvminleftrightspeed, lvmaxleftrightspeed),
+                Speed = RandomNumberGenerator.GetInt32(lvminspeed, lvmaxspeed),
                 Size = RandomNumberGenerator.GetInt32(10, 20),
             };
 
@@ -239,6 +264,27 @@ namespace BollGame
 
             player.X = clientpoint.X;
             player.Y = clientpoint.Y;
+
+        }
+
+        private void Restart()
+        {
+            IsDead = false;
+            Score = 0;
+            monsters.Clear();
+
+            Level = 1;
+
+            lvmaxspeed = LvMaxSpeed;
+            lvminspeed = LvMinSpeed;
+
+            lvmaxleftrightspeed = LvMaxLeftRightSpeed;
+            lvminleftrightspeed = LvMinLeftRightSpeed;
+
+            Updatetimer.Start();
+            Monstertimer.Start();
+
+            Cursor.Hide();
 
         }
     }
