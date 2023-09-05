@@ -40,8 +40,6 @@ namespace BollGame
         int lvminleftrightspeed = LvMinLeftRightSpeed;
 
         int Level = 1;
-        //---------------------------
-        
         bool cheat = false;
 
         public Form1()
@@ -84,6 +82,7 @@ namespace BollGame
                 //再挑戦するか聞く
                 var result = MessageBox.Show("ゲームオーバー！　スコア：" + Score + Environment.NewLine +
                     "再挑戦する？ ", "( ;∀;)", MessageBoxButtons.YesNo);
+
                 if (result == DialogResult.Yes)
                 {
                     //変数初期化する
@@ -189,12 +188,34 @@ namespace BollGame
         /// <param name="e"></param>
         private void MonsterUpdate(object sender, EventArgs e)
         {
+            //スコアに応じてステータスを変更する
+            Change_on_score();
+
+            //ランダムな速度、位置でインスタンス化
+            Monster monster = new()
+            {
+                X = RandomNumberGenerator.GetInt32(0, this.Size.Width),
+                Y = -20,
+                LeftRightSpeed = RandomNumberGenerator.GetInt32(lvminleftrightspeed, lvmaxleftrightspeed),
+                Speed = RandomNumberGenerator.GetInt32(lvminspeed, lvmaxspeed),
+                Size = RandomNumberGenerator.GetInt32(10, 20),
+            };
+
+            //モンスター描画リストに追加
+            monsters.Add(monster);
+        }
+
+        /// <summary>
+        /// スコアに応じてステータスなどを変更します。
+        /// </summary>
+        private void Change_on_score()
+        {
             if (600 < Score)
             {
                 Level = 2;
                 lvminspeed = 4;
                 ChangeTimerInterval(Monstertimer, 70);
-                lvmaxleftrightspeed= 1;
+                lvmaxleftrightspeed = 1;
                 lvminleftrightspeed = -1;
             }
 
@@ -215,19 +236,6 @@ namespace BollGame
                 lvmaxleftrightspeed = 3;
                 lvminleftrightspeed = -3;
             }
-
-            //ランダムな速度、位置でインスタンス化
-            Monster monster = new Monster
-            {
-                X = RandomNumberGenerator.GetInt32(0, this.Size.Width),
-                Y = -20,
-                LeftRightSpeed = RandomNumberGenerator.GetInt32(lvminleftrightspeed, lvmaxleftrightspeed),
-                Speed = RandomNumberGenerator.GetInt32(lvminspeed, lvmaxspeed),
-                Size = RandomNumberGenerator.GetInt32(10, 20),
-            };
-
-            //モンスター描画リストに追加
-            monsters.Add(monster);
         }
 
         /// <summary>
@@ -267,6 +275,9 @@ namespace BollGame
 
         }
 
+        /// <summary>
+        /// 再スタートする時に初期化などを行う
+        /// </summary>
         private void Restart()
         {
             IsDead = false;
@@ -285,7 +296,6 @@ namespace BollGame
             Monstertimer.Start();
 
             Cursor.Hide();
-
         }
     }
 }
